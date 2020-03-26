@@ -11,4 +11,5 @@
     <color name="gray">#EAEFF7</color>
     <color name="textWhite">#FFFFFF</color>
     <color name="text">#161616</color>
+    <color name="textSecondary">#99161616</color>
 </resources>
