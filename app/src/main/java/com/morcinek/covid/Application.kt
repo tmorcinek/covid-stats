@@ -2,7 +2,9 @@ package com.morcinek.covid
 
 import android.app.Application
 import com.google.gson.GsonBuilder
-import com.morcinek.covid.ui.home.homeModule
+import com.morcinek.covid.ui.summary.summaryModule
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -21,7 +23,7 @@ class Application : Application() {
             modules(
                 appModule,
 //                navModule,
-                homeModule
+                summaryModule
 //                teamsModule, teamDetailsModule, createTeamModule, addPlayersModule,
 //                createEventModule, eventDetailsModule,
 //                playersModule, playerDetailsModule, createPlayerModule, playerStatsModule,
@@ -37,6 +39,13 @@ val appModule = module {
     single<Retrofit> {
         Retrofit.Builder()
             .baseUrl("https://api.covid19api.com/")
+            .client(
+                OkHttpClient.Builder().apply {
+                    if (BuildConfig.DEBUG) {
+                        addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+                    }
+                }.build()
+            )
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
             .build()
     }

@@ -1,4 +1,4 @@
-package com.morcinek.covid.ui.home
+package com.morcinek.covid.ui.summary
 
 import android.os.Bundle
 import android.view.View
@@ -14,15 +14,15 @@ import com.morcinek.covid.core.listAdapter
 import com.morcinek.covid.getApi
 import com.morcinek.covid.ui.lazyNavController
 import kotlinx.android.synthetic.main.fragment_list.view.*
-import kotlinx.android.synthetic.main.vh_home.*
+import kotlinx.android.synthetic.main.vh_summary.view.*
 import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.dsl.module
 
-class HomeFragment : BaseFragment(R.layout.fragment_list) {
+class SummaryFragment : BaseFragment(R.layout.fragment_list) {
 
-    private val viewModel by viewModel<HomeViewModel>()
+    private val viewModel by viewModel<SummaryViewModel>()
 
     private val navController: NavController by lazyNavController()
 
@@ -30,29 +30,33 @@ class HomeFragment : BaseFragment(R.layout.fragment_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.progressBar.show()
         view.recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = listAdapter(R.layout.vh_home, itemCallback { areItemsTheSame { t1, t2 -> t1.Name == t2.Name } }) { _, item: HomeData ->
-                title.text = item.Name
-                subtitle.text = item.Description
-                path.text = item.Path
-                params.text = item.Params?.joinToString { "," } ?: ""
+            adapter = listAdapter(R.layout.vh_summary, itemCallback { areItemsTheSame { t1, t2 -> t1.Country == t2.Country } }) { _, item: SummaryCountry ->
+                title.text = item.Country
+                subtitle.text = "New Deaths/Confirmed ${item.NewDeaths}/ ${item.NewConfirmed}"
+                path.text = "Total Deaths/Confirmed ${item.TotalDeaths}/ ${item.TotalConfirmed}"
+                params.text = "Recoverd ${item.NewRecovered}/ ${item.TotalRecovered}"
 //                setOnClickListener { navController.navigate(R.id.nav_tournament_details, item.toBundle()) }
             }.apply {
-                observe(viewModel.data) { submitList(it) }
+                observe(viewModel.data) {
+                    submitList(it.Countries.sortedByDescending { it.TotalConfirmed })
+                    view.progressBar.hide()
+                }
             }
         }
     }
 }
 
-val homeModule = module {
-    viewModel { HomeViewModel(getApi()) }
+val summaryModule = module {
+    viewModel { SummaryViewModel(getApi()) }
 }
 
-private class HomeViewModel(val homeApi: HomeApi) : ViewModel() {
+private class SummaryViewModel(val summaryApi: SummaryApi) : ViewModel() {
 
-    val data = liveData(Dispatchers.IO){
-        emit(homeApi.getData())
+    val data = liveData(Dispatchers.IO) {
+        emit(summaryApi.getData())
     }
 }
 

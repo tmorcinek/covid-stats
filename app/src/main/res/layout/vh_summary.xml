@@ -34,7 +34,6 @@
                 android:layout_alignParentEnd="true"
                 style="@style/ItemSubtitle"
                 android:textColor="@color/colorAccent"
-                android:visibility="gone"
                 tools:visibility="visible"
                 tools:text="Path" />
 
