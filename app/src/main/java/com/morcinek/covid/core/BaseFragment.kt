@@ -53,7 +53,7 @@ abstract class BaseFragment(private val layoutResourceId: Int) : Fragment() {
         } ?: return false
     }
 
-    final override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) = menuConfiguration.safeLet {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) = menuConfiguration.safeLet {
         it.actions.forEachIndexed { index, item ->
             menu.add(Menu.NONE, index, index, item.textRes)
                 .setIcon(item.iconRes)

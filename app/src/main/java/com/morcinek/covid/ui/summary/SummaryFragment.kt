@@ -1,14 +1,18 @@
 package com.morcinek.covid.ui.summary
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.morcinek.covid.R
 import com.morcinek.covid.core.BaseFragment
-import com.morcinek.covid.core.extensions.observe
+import com.morcinek.covid.core.extensions.*
 import com.morcinek.covid.core.itemCallback
 import com.morcinek.covid.core.listAdapter
 import com.morcinek.covid.getApi
@@ -20,6 +24,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.dsl.module
 
+
 class SummaryFragment : BaseFragment(R.layout.fragment_list) {
 
     private val viewModel by viewModel<SummaryViewModel>()
@@ -30,6 +35,7 @@ class SummaryFragment : BaseFragment(R.layout.fragment_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         view.progressBar.show()
         view.recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -43,13 +49,23 @@ class SummaryFragment : BaseFragment(R.layout.fragment_list) {
                 totalRecovered.text = "${item.TotalRecovered}"
 //                setOnClickListener { navController.navigate(R.id.nav_tournament_details, item.toBundle()) }
             }.apply {
-                observe(viewModel.data) {
-                    submitList(it.Countries.sortedByDescending { it.TotalConfirmed })
+                observe(viewModel.countriesData) {
+                    submitList(it)
                     view.progressBar.hide()
                 }
             }
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main, menu)
+        menu.findItem(R.id.action_search).apply {
+            (actionView as SearchView).setOnQueryTextChange { viewModel.updateSearchText(it) }
+            setOnMenuItemActionCollapse { viewModel.updateSearchText("") }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = false
 }
 
 val summaryModule = module {
@@ -58,6 +74,13 @@ val summaryModule = module {
 
 private class SummaryViewModel(val summaryApi: SummaryApi) : ViewModel() {
 
-    val data = liveData(Dispatchers.IO) { emit(summaryApi.getData()) }
+    private val data = liveData(Dispatchers.IO) { emit(summaryApi.getData()) }
+    private val searchTextData = mutableValueLiveData("")
+
+    val countriesData = combine(data, searchTextData) { summaryData, text ->
+        summaryData.Countries.filter { it.Country.contains(text, true) }.sortedByDescending { it.TotalConfirmed }
+    }
+
+    fun updateSearchText(text: String) = searchTextData.postValue(text)
 }
 

@@ -11,7 +11,7 @@
         <item name="android:textColor">@color/text</item>
 <!--        <item name="android:textColorPrimary">@color/black_60</item>-->
 <!--        <item name="android:textColorHint">@color/black_60</item>-->
-        <item name="android:editTextColor">@color/text</item>
+        <item name="android:editTextColor">@color/textWhite</item>
 
         <item name="android:windowTranslucentStatus">true</item>
 
