@@ -35,9 +35,12 @@ class SummaryFragment : BaseFragment(R.layout.fragment_list) {
             layoutManager = LinearLayoutManager(activity)
             adapter = listAdapter(R.layout.vh_summary, itemCallback { areItemsTheSame { t1, t2 -> t1.Country == t2.Country } }) { _, item: SummaryCountry ->
                 title.text = item.Country
-                subtitle.text = "New Deaths/Confirmed ${item.NewDeaths}/ ${item.NewConfirmed}"
-                path.text = "Total Deaths/Confirmed ${item.TotalDeaths}/ ${item.TotalConfirmed}"
-                params.text = "Recoverd ${item.NewRecovered}/ ${item.TotalRecovered}"
+                newConfirmed.text = "${item.NewConfirmed}"
+                newDeaths.text = "${item.NewDeaths}"
+                totalConfirmed.text = "${item.TotalConfirmed}"
+                totalDeaths.text = "${item.TotalDeaths}"
+                newRecovered.text = "${item.NewRecovered}"
+                totalRecovered.text = "${item.TotalRecovered}"
 //                setOnClickListener { navController.navigate(R.id.nav_tournament_details, item.toBundle()) }
             }.apply {
                 observe(viewModel.data) {
@@ -55,8 +58,6 @@ val summaryModule = module {
 
 private class SummaryViewModel(val summaryApi: SummaryApi) : ViewModel() {
 
-    val data = liveData(Dispatchers.IO) {
-        emit(summaryApi.getData())
-    }
+    val data = liveData(Dispatchers.IO) { emit(summaryApi.getData()) }
 }
 

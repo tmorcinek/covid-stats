@@ -1,52 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        card_view:cardCornerRadius="8dp"
-        style="@style/StandardCardView">
+        style="@style/StandardCardView"
+        app:cardCornerRadius="8dp">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin">
+            android:padding="2dp">
 
         <TextView
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Monday 13 November"
-                style="@style/ItemTitle" />
+                style="@style/ItemTitle"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/half_margin"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintWidth_percent="0.4"
+                tools:text="United states of america and africa" />
 
         <TextView
-                android:id="@+id/subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin"
-                android:layout_below="@id/title"
-                tools:text="13 Players"
-                style="@style/ItemSubtitle" />
-
-        <TextView
-                android:id="@+id/path"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin"
-                android:layout_alignParentEnd="true"
+                android:id="@+id/confirmedLabel"
                 style="@style/ItemSubtitle"
-                android:textColor="@color/colorAccent"
-                tools:visibility="visible"
-                tools:text="Path" />
-
-        <TextView
-                android:id="@+id/params"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/title"
-                android:layout_marginTop="@dimen/margin"
-                android:layout_alignParentEnd="true"
-                style="@style/ItemSubtitle"
-                android:textColor="@color/colorAccent"
-                tools:text="Not Finished" />
+                android:layout_marginStart="@dimen/half_margin"
+                android:layout_marginTop="@dimen/half_margin"
+                android:text="Confirmed"
+                android:textColor="@color/blue"
+                app:layout_constraintStart_toEndOf="@id/title"
+                app:layout_constraintTop_toBottomOf="@id/newLabel" />
 
-    </RelativeLayout>
+        <TextView
+                android:id="@+id/deathsLabel"
+                style="@style/ItemSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Deaths"
+                android:textColor="@color/red"
+                app:layout_constraintEnd_toEndOf="@id/confirmedLabel"
+                app:layout_constraintTop_toBottomOf="@id/confirmedLabel" />
+
+        <TextView
+                android:id="@+id/recoveredLabel"
+                style="@style/ItemSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recovered"
+                android:textColor="@color/green"
+                app:layout_constraintEnd_toEndOf="@id/confirmedLabel"
+                app:layout_constraintTop_toBottomOf="@id/deathsLabel" />
+
+        <View
+                android:layout_width="1px"
+                android:layout_height="0dp"
+                android:background="@color/textSecondary"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="@id/confirmedLabel"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/totalLabel" />
+
+        <TextView
+                android:id="@+id/newLabel"
+                style="@style/ItemSubtitle.Centered"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="NEW"
+                app:layout_constraintEnd_toStartOf="@id/totalLabel"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.2" />
+
+        <TextView
+                android:id="@+id/totalLabel"
+                style="@style/ItemSubtitle.Centered"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="TOTAL"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.2" />
+
+        <TextView
+                android:id="@+id/newConfirmed"
+                style="@style/ItemSubtitle.Centered.Bold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/blue"
+                app:layout_constraintEnd_toEndOf="@id/newLabel"
+                app:layout_constraintTop_toTopOf="@id/confirmedLabel"
+                app:layout_constraintWidth_percent="0.2"
+                tools:text="67" />
+
+        <TextView
+                android:id="@+id/newDeaths"
+                style="@style/ItemSubtitle.Centered.Bold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                app:layout_constraintEnd_toEndOf="@id/newLabel"
+                app:layout_constraintTop_toTopOf="@id/deathsLabel"
+                app:layout_constraintWidth_percent="0.2"
+                tools:text="2" />
+
+        <TextView
+                android:id="@+id/newRecovered"
+                style="@style/ItemSubtitle.Centered.Bold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/green"
+                app:layout_constraintEnd_toEndOf="@id/newLabel"
+                app:layout_constraintTop_toTopOf="@id/recoveredLabel"
+                app:layout_constraintWidth_percent="0.2"
+                tools:text="6" />
+
+        <TextView
+                android:id="@+id/totalConfirmed"
+                style="@style/ItemSubtitle.Centered.Bold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/blue"
+                app:layout_constraintStart_toStartOf="@id/totalLabel"
+                app:layout_constraintTop_toTopOf="@id/confirmedLabel"
+                app:layout_constraintWidth_percent="0.2"
+                tools:text="1234" />
+
+        <TextView
+                android:id="@+id/totalDeaths"
+                style="@style/ItemSubtitle.Centered.Bold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                app:layout_constraintStart_toStartOf="@id/totalLabel"
+                app:layout_constraintTop_toTopOf="@id/deathsLabel"
+                app:layout_constraintWidth_percent="0.2"
+                tools:text="56" />
+
+        <TextView
+                android:id="@+id/totalRecovered"
+                style="@style/ItemSubtitle.Centered.Bold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/green"
+                app:layout_constraintStart_toStartOf="@id/totalLabel"
+                app:layout_constraintTop_toTopOf="@id/recoveredLabel"
+                app:layout_constraintWidth_percent="0.2"
+                tools:text="450" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
