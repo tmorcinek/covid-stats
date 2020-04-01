@@ -1,5 +1,7 @@
 package com.morcinek.covid.ui.summary
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import retrofit2.http.GET
 
 data class SummaryData(
@@ -7,6 +9,7 @@ data class SummaryData(
     val Date: String
 )
 
+@Parcelize
 data class SummaryCountry(
     val Country: String,
     val Slug: String,
@@ -16,7 +19,7 @@ data class SummaryCountry(
     val TotalConfirmed: Int,
     val TotalDeaths: Int,
     val TotalRecovered: Int
-)
+) : Parcelable
 
 interface SummaryApi {
     @GET("summary")

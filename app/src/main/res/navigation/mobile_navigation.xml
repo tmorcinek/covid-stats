@@ -8,11 +8,12 @@
     <fragment
             android:id="@+id/nav_home"
             android:name="com.morcinek.covid.ui.summary.SummaryFragment"
-            android:label="@string/menu_home"
-            tools:layout="@layout/fragment_list">
+            android:label="@string/menu_summary"
+            tools:layout="@layout/fragment_list"/>
 
-<!--        <action-->
-<!--                android:id="@+id/action_HomeFragment_to_HomeSecondFragment"-->
-<!--                app:destination="@id/nav_home_second" />-->
-    </fragment>
+    <fragment
+            android:id="@+id/nav_days"
+            android:name="com.morcinek.covid.ui.days.DaysFragment"
+            android:label="@string/menu_days"
+            tools:layout="@layout/fragment_list"/>
 </navigation>
