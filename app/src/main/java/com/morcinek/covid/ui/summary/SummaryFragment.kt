@@ -3,7 +3,6 @@ package com.morcinek.covid.ui.summary
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModel
@@ -64,8 +63,6 @@ class SummaryFragment : BaseFragment(R.layout.fragment_list) {
             setOnMenuItemActionCollapse { viewModel.updateSearchText("") }
         }
     }
-
-    override fun onOptionsItemSelected(item: MenuItem) = false
 }
 
 val summaryModule = module {
@@ -78,7 +75,7 @@ private class SummaryViewModel(val summaryApi: SummaryApi) : ViewModel() {
     private val searchTextData = mutableValueLiveData("")
 
     val countriesData = combine(data, searchTextData) { summaryData, text ->
-        summaryData.Countries.filter { it.Country.contains(text, true) }.sortedByDescending { it.TotalConfirmed }
+        summaryData.Countries.filter { it.Country.contains(text, true) }.distinctBy { it.Slug }.sortedByDescending { it.TotalConfirmed }
     }
 
     fun updateSearchText(text: String) = searchTextData.postValue(text)

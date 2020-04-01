@@ -9,7 +9,7 @@ data class SummaryData(
 
 data class SummaryCountry(
     val Country: String,
-    val CountrySlug: String,
+    val Slug: String,
     val NewConfirmed: Int,
     val NewDeaths: Int,
     val NewRecovered: Int,
