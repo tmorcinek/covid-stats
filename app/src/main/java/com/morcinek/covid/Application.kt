@@ -2,7 +2,7 @@ package com.morcinek.covid
 
 import android.app.Application
 import com.google.gson.GsonBuilder
-import com.morcinek.covid.ui.days.daysModule
+import com.morcinek.covid.ui.country.countryModule
 import com.morcinek.covid.ui.summary.summaryModule
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -23,7 +23,7 @@ class Application : Application() {
             androidContext(this@Application)
             modules(
                 appModule,
-                summaryModule, daysModule
+                summaryModule, countryModule
             )
         }
     }
