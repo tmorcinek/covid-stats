@@ -12,6 +12,9 @@
     <string name="page_deaths">Deaths</string>
     <string name="page_recovered">Recovered</string>
 
+    <string name="page_summary">Summary</string>
+    <string name="page_chart">Chart</string>
+
     <string name="rate_title">Death rate</string>
     <string name="rate_subtitle">Percentage of people who were tested positive for coronavirus and died.\nPLEASE NOTE that not everyone who has contracted coronavirus gets tested.</string>
     <string name="confirmed_title">Number of confirmed cases</string>
