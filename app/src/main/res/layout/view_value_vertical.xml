@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin"
+        tools:showIn="@layout/view_country_summary">
+
+    <TextView
+            android:id="@+id/title"
+            style="@style/ItemTitle"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/deaths_title" />
+
+    <TextView
+            android:id="@+id/value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:layout_centerHorizontal="true"
+            android:padding="@dimen/margin"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            tools:text="234" />
+
+
+    <TextView
+            android:id="@+id/subtitle"
+            style="@style/ItemSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/value"
+            tools:text="@string/deaths_subtitle" />
+</RelativeLayout>

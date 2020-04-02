@@ -12,4 +12,13 @@
     <string name="page_deaths">Deaths</string>
     <string name="page_recovered">Recovered</string>
 
+    <string name="rate_title">Death rate</string>
+    <string name="rate_subtitle">Percentage of people who were tested positive for coronavirus and died.\nPLEASE NOTE that not everyone who has contracted coronavirus gets tested.</string>
+    <string name="confirmed_title">Number of confirmed cases</string>
+    <string name="confirmed_subtitle">Numbers of people who were tested positive for coronavirus.\nPLEASE NOTE that this doesn\'t include all coronavirus positive people. Only the people who felt it was necessary tested.</string>
+    <string name="deaths_title">Number of deaths</string>
+    <string name="deaths_subtitle">Numbers of people who died and were tested positive for coronavirus.\nPLEASE NOTE that this doesn\'t mean that coronavirus where the cause of death.</string>
+    <string name="recovered_title">Number of recovered</string>
+    <string name="recovered_subtitle">Numbers of people who were tested positive and then negative for coronavirus.</string>
+
 </resources>

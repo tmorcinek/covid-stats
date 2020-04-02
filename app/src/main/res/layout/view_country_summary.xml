@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/margin">
+
+    <include
+            android:id="@+id/rateLayout"
+            layout="@layout/view_value_vertical" />
+    <include
+            android:id="@+id/confirmedLayout"
+            layout="@layout/view_value_horizontal" />
+
+    <include
+            android:id="@+id/deathsLayout"
+            layout="@layout/view_value_horizontal" />
+
+    <include
+            android:id="@+id/recoveredLayout"
+            layout="@layout/view_value_horizontal" />
+</LinearLayout>
