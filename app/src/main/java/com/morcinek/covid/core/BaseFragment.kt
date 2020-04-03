@@ -45,8 +45,8 @@ abstract class BaseFragment(private val layoutResourceId: Int) : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        menuConfiguration?.takeIf { item.itemId < it.actions.size }?.let {
-            it.actions[item.itemId].let { menuConfigurationItem ->
+        menuConfiguration?.let {
+            it.actions.find { it.textRes == item.itemId }?.let { menuConfigurationItem ->
                 menuConfigurationItem.action.invoke()
                 return true
             }
@@ -55,7 +55,7 @@ abstract class BaseFragment(private val layoutResourceId: Int) : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) = menuConfiguration.safeLet {
         it.actions.forEachIndexed { index, item ->
-            menu.add(Menu.NONE, index, index, item.textRes)
+            menu.add(Menu.NONE, item.textRes, index, item.textRes)
                 .setIcon(item.iconRes)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         }
@@ -77,3 +77,5 @@ class MenuConfiguration {
 class MenuConfigurationItem(val textRes: Int, val iconRes: Int, val action: () -> Any)
 
 inline fun createMenuConfiguration(function: MenuConfiguration.() -> Unit) = MenuConfiguration().apply(function)
+
+fun Fragment.invalidateOptionsMenu() = requireActivity().invalidateOptionsMenu()
