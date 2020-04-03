@@ -19,7 +19,12 @@ data class SummaryCountry(
     val TotalConfirmed: Int,
     val TotalDeaths: Int,
     val TotalRecovered: Int
-) : Parcelable
+) : Parcelable {
+
+    fun hasData() = TotalConfirmed > 100
+
+    fun deathRate(): Float = TotalDeaths.toFloat() * 100 / TotalConfirmed
+}
 
 interface SummaryApi {
     @GET("summary")

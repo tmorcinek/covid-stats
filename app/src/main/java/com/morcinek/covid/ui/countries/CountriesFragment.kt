@@ -40,9 +40,9 @@ class SummaryFragment : BaseFragment(R.layout.fragment_list) {
                 title.text = item.Country
                 newConfirmed.text = "${item.NewConfirmed}"
                 newDeaths.text = "${item.NewDeaths}"
+                newRecovered.text = "${item.NewRecovered}"
                 totalConfirmed.text = "${item.TotalConfirmed}"
                 totalDeaths.text = "${item.TotalDeaths}"
-                newRecovered.text = "${item.NewRecovered}"
                 totalRecovered.text = "${item.TotalRecovered}"
                 setOnClickListener { navController.navigate(R.id.nav_days, item.toBundleWithTitle { Country }) }
             }.apply {

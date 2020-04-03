@@ -44,8 +44,7 @@ class CountryFragment : BaseFragment(R.layout.fragment_pager) {
             rateLayout.apply {
                 title.setText(R.string.rate_title)
                 subtitle.setText(R.string.rate_subtitle)
-                val rate = it.TotalDeaths * 100f / it.TotalConfirmed.toFloat()
-                value.text = "$rate%"
+                value.text = "${it.deathRate()}%"
             }
             confirmedLayout.apply {
                 title.setText(R.string.confirmed_title)

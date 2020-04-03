@@ -21,7 +21,7 @@ import com.morcinek.covid.ui.countries.SummaryApi
 import com.morcinek.covid.ui.countries.SummaryCountry
 import com.morcinek.covid.ui.lazyNavController
 import kotlinx.android.synthetic.main.fragment_list.view.*
-import kotlinx.android.synthetic.main.vh_summary.view.*
+import kotlinx.android.synthetic.main.vh_title_value.view.*
 import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -49,15 +49,13 @@ class TopTenFragment : BaseFragment(R.layout.fragment_list) {
         view.recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter =
-                listAdapter(R.layout.vh_summary, itemCallback { areItemsTheSame { t1, t2 -> t1.Country == t2.Country } }) { _, item: SummaryCountry ->
-                    title.text = item.Country
-                    newConfirmed.text = "${item.NewConfirmed}"
-                    newDeaths.text = "${item.NewDeaths}"
-                    totalConfirmed.text = "${item.TotalConfirmed}"
-                    totalDeaths.text = "${item.TotalDeaths}"
-                    newRecovered.text = "${item.NewRecovered}"
-                    totalRecovered.text = "${item.TotalRecovered}"
-                    setOnClickListener { navController.navigate(R.id.nav_days, item.toBundleWithTitle { Country }) }
+                listAdapter(R.layout.vh_title_value, itemCallback {
+                    areItemsTheSame { t1, t2 -> t1.title == t2.title }
+                    areContentsTheSame { t1, t2 -> t1.value == t2.value }
+                }) { _, item: TitleValue ->
+                    title.text = item.title
+                    value.text = item.value
+                    setOnClickListener { navController.navigate(R.id.nav_days, item.summaryCountry.toBundleWithTitle { Country }) }
                 }.apply {
                     observe(viewModel.countriesData) {
                         submitList(it) { scrollToPosition(0) }
@@ -79,16 +77,21 @@ private class TopTenViewModel(val summaryApi: SummaryApi) : ViewModel() {
     private val selectedSortingMethod = mutableValueLiveData(sortingMethods.first())
 
     val countriesData = combine(data, selectedSortingMethod) { summaryData, sortingMethod ->
-        summaryData.Countries.distinctBy { it.Slug }.sortedByDescending(sortingMethod.function).take(10)
+        summaryData.Countries.distinctBy { it.Slug }.filter { it.hasData() }.run(sortingMethod.sorting).reversed()
+            .take(10).map { TitleValue(it.Country, sortingMethod.formatting(it), it) }
     }
 
     fun selectSortingMethod(sortingMethod: SortingMethod) = selectedSortingMethod.postValue(sortingMethod)
 }
 
-private class SortingMethod(val text: Int, val function: (SummaryCountry) -> Int)
+private data class TitleValue(val title: String, val value: String, val summaryCountry: SummaryCountry)
+
+private class SortingMethod(val text: Int, val sorting: Iterable<SummaryCountry>.() -> Iterable<SummaryCountry>, val formatting: SummaryCountry.() -> String)
 
 private val sortingMethods = listOf(
-    SortingMethod(R.string.sorting_total_confirmed) { it.TotalConfirmed },
-    SortingMethod(R.string.sorting_total_deaths) { it.TotalDeaths },
-    SortingMethod(R.string.sorting_total_recovered) { it.TotalRecovered }
+    SortingMethod(R.string.sorting_total_confirmed, { sortedBy { it.TotalConfirmed } }, { TotalConfirmed.toString() }),
+    SortingMethod(R.string.sorting_total_deaths, { sortedBy { it.TotalDeaths } }, { TotalDeaths.toString() }),
+    SortingMethod(R.string.sorting_total_recovered, { sortedBy { it.TotalRecovered } }, { TotalRecovered.toString() }),
+    SortingMethod(R.string.sorting_rate, { sortedBy { it.deathRate() } }, { "${deathRate()}%" })
 )
+

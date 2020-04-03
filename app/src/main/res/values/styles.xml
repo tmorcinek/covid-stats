@@ -5,6 +5,18 @@
         <item name="android:textSize">@dimen/font_medium</item>
     </style>
 
+    <style name="ItemTitle.Centered">
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textSize">@dimen/font_medium</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="ItemTitle.Value" parent="ItemTitle.Centered">
+        <item name="android:textColor">@color/textSecondary</item>
+        <item name="android:textSize">@dimen/font_super_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="ItemTitle.Bold">
         <item name="android:textStyle">bold</item>
     </style>

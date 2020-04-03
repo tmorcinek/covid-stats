@@ -10,7 +10,7 @@
                 android:title="@string/menu_summary" />
         <item
                 android:id="@+id/nav_top"
-                android:icon="@drawable/ic_school"
+                android:icon="@drawable/ic_filter"
                 android:title="@string/menu_top" />
     </group>
 </menu>
