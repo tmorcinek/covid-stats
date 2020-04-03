@@ -30,5 +30,6 @@
     <string name="sorting_total_recovered">Total recovered</string>
     <string name="sorting_rate">Death rate</string>
     <string name="sort_by">Sort By</string>
+    <string name="isDescending">Is Descending</string>
 
 </resources>

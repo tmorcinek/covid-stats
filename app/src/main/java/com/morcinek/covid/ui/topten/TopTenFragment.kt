@@ -1,21 +1,19 @@
 package com.morcinek.covid.ui.topten
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.morcinek.covid.R
-import com.morcinek.covid.core.BaseFragment
-import com.morcinek.covid.core.createMenuConfiguration
+import com.morcinek.covid.core.*
 import com.morcinek.covid.core.extensions.alert.selector
 import com.morcinek.covid.core.extensions.combine
 import com.morcinek.covid.core.extensions.mutableValueLiveData
 import com.morcinek.covid.core.extensions.observe
 import com.morcinek.covid.core.extensions.toBundleWithTitle
-import com.morcinek.covid.core.itemCallback
-import com.morcinek.covid.core.listAdapter
 import com.morcinek.covid.getApi
 import com.morcinek.covid.ui.countries.SummaryApi
 import com.morcinek.covid.ui.countries.SummaryCountry
@@ -34,12 +32,24 @@ class TopTenFragment : BaseFragment(R.layout.fragment_list) {
 
     private val navController: NavController by lazyNavController()
 
-    //    override val fabConfiguration = FabConfiguration({ navController.navigate(R.id.nav_how_many_players) })
+//    override val fabConfiguration = FabConfiguration({ navController.navigate(R.id.nav_how_many_players) })
 
     override val menuConfiguration = createMenuConfiguration {
         addAction(R.string.sort_by, R.drawable.ic_sort) {
-            selector(R.string.sort_by, sortingMethods.map { getString(it.text) }) { _, index -> viewModel.selectSortingMethod(sortingMethods[index]) }
+            selector(R.string.sort_by, sortingMethods.map { getString(it.text) }) { _, index ->
+                viewModel.updateFilterData {
+                    sortingMethod = sortingMethods[index]
+                }
+            }
         }
+        addAction(R.string.isDescending, R.drawable.ic_arrow_upward) {
+            viewModel.updateFilterData { isDescending = !isDescending }
+            invalidateOptionsMenu()
+        }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.string.isDescending).setIcon(if (viewModel.isDescending) R.drawable.ic_arrow_upward else R.drawable.ic_arrow_downward)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,17 +84,23 @@ private class TopTenViewModel(val summaryApi: SummaryApi) : ViewModel() {
 
     private val data = liveData(Dispatchers.IO) { emit(summaryApi.getData()) }
 
-    private val selectedSortingMethod = mutableValueLiveData(sortingMethods.first())
+    private val filterData = mutableValueLiveData(FilterData(true, sortingMethods.first()))
 
-    val countriesData = combine(data, selectedSortingMethod) { summaryData, sortingMethod ->
-        summaryData.Countries.distinctBy { it.Slug }.filter { it.hasData() }.run(sortingMethod.sorting).reversed()
-            .take(10).map { TitleValue(it.Country, sortingMethod.formatting(it), it) }
+    val isDescending: Boolean
+        get() = filterData.value!!.isDescending
+
+    val countriesData = combine(data, filterData) { summaryData, filterData ->
+        summaryData.Countries.distinctBy { it.Slug }.filter { it.hasData() }.run(filterData.sortingMethod.sorting)
+            .run { if (filterData.isDescending) reversed() else this }
+            .map { TitleValue(it.Country, filterData.sortingMethod.formatting(it), it) }
     }
 
-    fun selectSortingMethod(sortingMethod: SortingMethod) = selectedSortingMethod.postValue(sortingMethod)
+    fun updateFilterData(update: FilterData.() -> Unit) = filterData.postValue(filterData.value!!.apply(update))
 }
 
 private data class TitleValue(val title: String, val value: String, val summaryCountry: SummaryCountry)
+
+private class FilterData(var isDescending: Boolean, var sortingMethod: SortingMethod)
 
 private class SortingMethod(val text: Int, val sorting: Iterable<SummaryCountry>.() -> Iterable<SummaryCountry>, val formatting: SummaryCountry.() -> String)
 
