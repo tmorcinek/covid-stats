@@ -34,6 +34,8 @@ class TopTenFragment : BaseFragment(R.layout.fragment_list) {
 
     private val navController: NavController by lazyNavController()
 
+    //    override val fabConfiguration = FabConfiguration({ navController.navigate(R.id.nav_how_many_players) })
+
     override val menuConfiguration = createMenuConfiguration {
         addAction(R.string.sort_by, R.drawable.ic_sort) {
             selector(R.string.sort_by, sortingMethods.map { getString(it.text) }) { _, index -> viewModel.selectSortingMethod(sortingMethods[index]) }
@@ -58,7 +60,7 @@ class TopTenFragment : BaseFragment(R.layout.fragment_list) {
                     setOnClickListener { navController.navigate(R.id.nav_days, item.toBundleWithTitle { Country }) }
                 }.apply {
                     observe(viewModel.countriesData) {
-                        submitList(it)
+                        submitList(it) { scrollToPosition(0) }
                         view.progressBar.hide()
                     }
                 }

@@ -30,16 +30,13 @@ class SummaryFragment : BaseFragment(R.layout.fragment_list) {
 
     private val navController: NavController by lazyNavController()
 
-//    override val fabConfiguration = FabConfiguration({ navController.navigate(R.id.nav_how_many_players) })
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         view.progressBar.show()
         view.recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = listAdapter(R.layout.vh_summary, itemCallback { areItemsTheSame { t1, t2 -> t1.Country == t2.Country } }) { position, item: SummaryCountry ->
-                subtitle.text = "${position + 1}"
+            adapter = listAdapter(R.layout.vh_summary, itemCallback { areItemsTheSame { t1, t2 -> t1.Country == t2.Country } }) { _, item: SummaryCountry ->
                 title.text = item.Country
                 newConfirmed.text = "${item.NewConfirmed}"
                 newDeaths.text = "${item.NewDeaths}"
