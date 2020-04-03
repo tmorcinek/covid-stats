@@ -56,6 +56,9 @@ fun <A, B, C> combine(sourceA: LiveData<A>, sourceB: LiveData<B>, sourceC: LiveD
 fun <T, R, Y> combine(sourceA: LiveData<T>, sourceB: LiveData<R>, mapFunction: (T, R) -> (Y)): LiveData<Y> =
     combine(sourceA, sourceB).map { mapFunction(it.first, it.second) }
 
+fun <A, B, C, Y> combine(sourceA: LiveData<A>, sourceB: LiveData<B>, sourceC: LiveData<C>, mapFunction: (A, B, C) -> (Y)): LiveData<Y> =
+    combine(sourceA, sourceB, sourceC).map { mapFunction(it.first, it.second, it.third) }
+
 fun <T, R, Y> LiveData<T>.combineWith(source: LiveData<R>, mapFunction: (T, R) -> (Y)): LiveData<Y> =
     combine(this, source).map { mapFunction(it.first, it.second) }
 

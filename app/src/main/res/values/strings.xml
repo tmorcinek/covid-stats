@@ -6,7 +6,8 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
 
-    <string name="menu_summary">Summary</string>
+    <string name="menu_summary">Countries</string>
+    <string name="menu_top">Top Countries</string>
 
     <string name="page_confirmed">Confirmed</string>
     <string name="page_deaths">Deaths</string>
@@ -23,5 +24,10 @@
     <string name="deaths_subtitle">Numbers of people who died and were tested positive for coronavirus.\nPLEASE NOTE that this doesn\'t mean that coronavirus where the cause of death.</string>
     <string name="recovered_title">Number of recovered</string>
     <string name="recovered_subtitle">Numbers of people who were tested positive and then negative for coronavirus.</string>
+
+    <string name="sorting_total_confirmed">Total infected</string>
+    <string name="sorting_total_deaths">Total deaths</string>
+    <string name="sorting_total_recovered">Total recovered</string>
+    <string name="sort_by">Sort By</string>
 
 </resources>

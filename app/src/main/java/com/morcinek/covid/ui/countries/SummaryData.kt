@@ -1,4 +1,4 @@
-package com.morcinek.covid.ui.summary
+package com.morcinek.covid.ui.countries
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

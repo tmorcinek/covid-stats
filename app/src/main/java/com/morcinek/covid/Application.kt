@@ -3,7 +3,8 @@ package com.morcinek.covid
 import android.app.Application
 import com.google.gson.GsonBuilder
 import com.morcinek.covid.ui.country.countryModule
-import com.morcinek.covid.ui.summary.summaryModule
+import com.morcinek.covid.ui.countries.summaryModule
+import com.morcinek.covid.ui.topten.topTenModule
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -23,7 +24,8 @@ class Application : Application() {
             androidContext(this@Application)
             modules(
                 appModule,
-                summaryModule, countryModule
+                summaryModule, topTenModule,
+                countryModule
             )
         }
     }

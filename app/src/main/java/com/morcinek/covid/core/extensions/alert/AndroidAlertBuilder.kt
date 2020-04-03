@@ -68,6 +68,18 @@ internal class AndroidAlertBuilder(override val ctx: Context) : AlertBuilder<Ale
         builder.setNeutralButton(buttonTextResource) { dialog, _ -> onClicked(dialog) }
     }
 
+    override fun items(items: List<CharSequence>, onItemSelected: (dialog: DialogInterface, index: Int) -> Unit) {
+        builder.setItems(Array(items.size) { i -> items[i].toString() }) { dialog, which ->
+            onItemSelected(dialog, which)
+        }
+    }
+
+    override fun <T> items(items: List<T>, onItemSelected: (dialog: DialogInterface, item: T, index: Int) -> Unit) {
+        builder.setItems(Array(items.size) { i -> items[i].toString() }) { dialog, which ->
+            onItemSelected(dialog, items[which], which)
+        }
+    }
+
     override fun build(): AlertDialog = builder.create()
 
     override fun show(): AlertDialog = builder.show()

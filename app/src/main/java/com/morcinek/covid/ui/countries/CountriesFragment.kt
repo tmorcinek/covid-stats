@@ -1,4 +1,4 @@
-package com.morcinek.covid.ui.summary
+package com.morcinek.covid.ui.countries
 
 import android.os.Bundle
 import android.view.Menu
@@ -38,7 +38,8 @@ class SummaryFragment : BaseFragment(R.layout.fragment_list) {
         view.progressBar.show()
         view.recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = listAdapter(R.layout.vh_summary, itemCallback { areItemsTheSame { t1, t2 -> t1.Country == t2.Country } }) { _, item: SummaryCountry ->
+            adapter = listAdapter(R.layout.vh_summary, itemCallback { areItemsTheSame { t1, t2 -> t1.Country == t2.Country } }) { position, item: SummaryCountry ->
+                subtitle.text = "${position + 1}"
                 title.text = item.Country
                 newConfirmed.text = "${item.NewConfirmed}"
                 newDeaths.text = "${item.NewDeaths}"

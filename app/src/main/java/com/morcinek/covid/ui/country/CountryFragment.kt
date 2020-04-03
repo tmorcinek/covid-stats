@@ -14,7 +14,7 @@ import com.morcinek.covid.R
 import com.morcinek.covid.core.BaseFragment
 import com.morcinek.covid.core.extensions.*
 import com.morcinek.covid.getApi
-import com.morcinek.covid.ui.summary.SummaryCountry
+import com.morcinek.covid.ui.countries.SummaryCountry
 import kotlinx.android.synthetic.main.fragment_pager.view.*
 import kotlinx.android.synthetic.main.view_country_summary.view.*
 import kotlinx.android.synthetic.main.view_line_chart.view.*

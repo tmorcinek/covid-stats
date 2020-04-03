@@ -11,6 +11,14 @@
             android:padding="2dp">
 
         <TextView
+                android:id="@+id/subtitle"
+                style="@style/ItemSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/title"
+                app:layout_constraintStart_toStartOf="@id/title"
+                tools:text="1" />
+        <TextView
                 android:id="@+id/title"
                 style="@style/ItemTitle"
                 android:layout_width="0dp"
