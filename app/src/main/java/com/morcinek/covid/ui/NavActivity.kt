@@ -11,7 +11,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.morcinek.covid.R
+import com.morcinek.covid.core.extensions.startWebsiteFromUrl
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.nav_header_main.view.*
 
 class NavActivity : AppCompatActivity() {
 
@@ -21,7 +23,7 @@ class NavActivity : AppCompatActivity() {
             drawerLayout
         )
     }
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -32,6 +34,10 @@ class NavActivity : AppCompatActivity() {
             navigationView.apply {
                 setupWithNavController(navController)
             }
+        }
+
+        navigationView.getHeaderView(0).apply {
+            textView.setOnClickListener { startWebsiteFromUrl(getString(R.string.nav_header_subtitle)) }
         }
     }
 
