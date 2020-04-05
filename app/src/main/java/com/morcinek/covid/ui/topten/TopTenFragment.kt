@@ -9,7 +9,6 @@ import androidx.navigation.NavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.morcinek.covid.R
 import com.morcinek.covid.core.*
-import com.morcinek.covid.core.extensions.alert.selector
 import com.morcinek.covid.core.extensions.alert.singleChoiceSelector
 import com.morcinek.covid.core.extensions.combine
 import com.morcinek.covid.core.extensions.mutableValueLiveData
@@ -66,7 +65,7 @@ class TopTenFragment : BaseFragment(R.layout.fragment_list) {
                 }) { _, item: TitleValue ->
                     title.text = item.title
                     value.text = item.value
-                    setOnClickListener { navController.navigate(R.id.nav_days, item.summaryCountry.toBundleWithTitle { Country }) }
+                    setOnClickListener { navController.navigate(R.id.nav_country, item.summaryCountry.toBundleWithTitle { Country }) }
                 }.apply {
                     observe(viewModel.countriesData) {
                         submitList(it) { scrollToPosition(0) }

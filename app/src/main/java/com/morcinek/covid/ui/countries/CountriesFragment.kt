@@ -44,7 +44,7 @@ class SummaryFragment : BaseFragment(R.layout.fragment_list) {
                 totalConfirmed.text = "${item.TotalConfirmed}"
                 totalDeaths.text = "${item.TotalDeaths}"
                 totalRecovered.text = "${item.TotalRecovered}"
-                setOnClickListener { navController.navigate(R.id.nav_days, item.toBundleWithTitle { Country }) }
+                setOnClickListener { navController.navigate(R.id.nav_country, item.toBundleWithTitle { Country }) }
             }.apply {
                 observe(viewModel.countriesData) {
                     submitList(it)
