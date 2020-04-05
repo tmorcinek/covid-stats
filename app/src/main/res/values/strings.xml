@@ -7,7 +7,7 @@
     <string name="nav_header_desc">Navigation header</string>
 
     <string name="menu_summary">Countries</string>
-    <string name="menu_top">Filter</string>
+    <string name="menu_top">Filter Countries</string>
 
     <string name="page_confirmed">Confirmed</string>
     <string name="page_deaths">Deaths</string>

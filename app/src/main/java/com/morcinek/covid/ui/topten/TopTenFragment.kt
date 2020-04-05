@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.morcinek.covid.R
 import com.morcinek.covid.core.*
 import com.morcinek.covid.core.extensions.alert.selector
+import com.morcinek.covid.core.extensions.alert.singleChoiceSelector
 import com.morcinek.covid.core.extensions.combine
 import com.morcinek.covid.core.extensions.mutableValueLiveData
 import com.morcinek.covid.core.extensions.observe
@@ -35,8 +36,8 @@ class TopTenFragment : BaseFragment(R.layout.fragment_list) {
 //    override val fabConfiguration = FabConfiguration({ navController.navigate(R.id.nav_how_many_players) })
 
     override val menuConfiguration = createMenuConfiguration {
-        addAction(R.string.sort_by, R.drawable.ic_sort) {
-            selector(R.string.sort_by, sortingMethods.map { getString(it.text) }) { _, index ->
+        addAction(R.string.sort_by, R.drawable.ic_filter) {
+            singleChoiceSelector(R.string.sort_by, getString(viewModel.sortingMethod.text), sortingMethods.map { getString(it.text) }) { _, index ->
                 viewModel.updateFilterData {
                     sortingMethod = sortingMethods[index]
                 }
@@ -85,6 +86,9 @@ private class TopTenViewModel(val summaryApi: SummaryApi) : ViewModel() {
     private val data = liveData(Dispatchers.IO) { emit(summaryApi.getData()) }
 
     private val filterData = mutableValueLiveData(FilterData(true, sortingMethods.first()))
+
+    val sortingMethod : SortingMethod
+        get() = filterData.value!!.sortingMethod
 
     val isDescending: Boolean
         get() = filterData.value!!.isDescending

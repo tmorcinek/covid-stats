@@ -80,6 +80,20 @@ internal class AndroidAlertBuilder(override val ctx: Context) : AlertBuilder<Ale
         }
     }
 
+    override fun singleChoiceItems(items: List<CharSequence>, selectedItem: CharSequence, onItemSelected: (dialog: DialogInterface, index: Int) -> Unit) {
+        builder.setSingleChoiceItems(Array(items.size) { i -> items[i].toString() }, items.indexOf(selectedItem)) { dialog, which ->
+            onItemSelected(dialog, which)
+            dialog.dismiss()
+        }
+    }
+
+    override fun <T> singleChoiceItems(items: List<T>, selectedItem: T, onItemSelected: (dialog: DialogInterface, item: T, index: Int) -> Unit) {
+        builder.setSingleChoiceItems(Array(items.size) { i -> items[i].toString() }, items.indexOf(selectedItem)) { dialog, which ->
+            onItemSelected(dialog, items[which], which)
+            dialog.dismiss()
+        }
+    }
+
     override fun build(): AlertDialog = builder.create()
 
     override fun show(): AlertDialog = builder.show()
