@@ -16,9 +16,6 @@
 
     <string name="page_summary">Summary</string>
     <string name="page_chart">Tendency</string>
-    <string name="page_deaths_by_day">Deaths by day</string>
-    <string name="page_confirmed_by_day">Confirmed by day</string>
-    <string name="page_recovered_by_day">Recovered by day</string>
 
     <string name="rate_title">Death rate</string>
     <string name="death_recovered_ratio_title">Death to Recovered Ratio</string>
