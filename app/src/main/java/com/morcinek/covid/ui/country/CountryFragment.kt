@@ -1,7 +1,6 @@
 package com.morcinek.covid.ui.country
 
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.view.View
 import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
@@ -15,6 +14,7 @@ import com.morcinek.covid.core.extensions.*
 import com.morcinek.covid.getApi
 import com.morcinek.covid.ui.countries.SummaryCountry
 import kotlinx.android.synthetic.main.fragment_pager.view.*
+import kotlinx.android.synthetic.main.view_bar_chart.view.*
 import kotlinx.android.synthetic.main.view_country_summary.view.*
 import kotlinx.android.synthetic.main.view_line_chart.view.*
 import kotlinx.android.synthetic.main.view_value_horizontal.view.*
@@ -22,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class CountryFragment : BaseFragment(R.layout.fragment_pager) {
@@ -30,7 +31,7 @@ class CountryFragment : BaseFragment(R.layout.fragment_pager) {
 
     private val dateFormat = dayMonthDateFormat()
 
-    private val colorText by lazy { getColor(requireContext(), R.color.text) }
+    private val colorText by lazy { getColor(requireContext(), R.color.textSecondary) }
     private val colorBlue by lazy { getColor(requireContext(), R.color.lightBlue) }
     private val colorGreen by lazy { getColor(requireContext(), R.color.green) }
     private val colorRed by lazy { getColor(requireContext(), R.color.red) }
@@ -39,7 +40,7 @@ class CountryFragment : BaseFragment(R.layout.fragment_pager) {
         super.onViewCreated(view, savedInstanceState)
         view.apply {
             tabLayout.setupWithViewPager(viewPager)
-            viewPager.adapter = pageAdapter(summaryPage(), chartPage())
+            viewPager.adapter = pageAdapter(summaryPage(), chartPage(), deathsByDayPage())
         }
     }
 
@@ -49,8 +50,7 @@ class CountryFragment : BaseFragment(R.layout.fragment_pager) {
                 isRotationEnabled = false
                 description.isEnabled = false
                 setUsePercentValues(true)
-                setEntryLabelColor(colorText)
-                setEntryLabelTextSize(12f)
+                setDrawEntryLabels(false)
                 data = PieData(PieDataSet(
                     listOf(
                         PieEntry(it.totalActive().toFloat().div(it.TotalConfirmed), getString(R.string.active)),
@@ -94,14 +94,12 @@ class CountryFragment : BaseFragment(R.layout.fragment_pager) {
 
     private fun chartPage() = Page(R.string.page_chart, R.layout.view_line_chart) {
         chart.apply {
-            description.isEnabled = false
-            axisLeft.isEnabled = false
             setTouchEnabled(true)
             setDrawGridBackground(true)
-            xAxis.apply {
-                valueFormatter = valueFormatter { dateFormat.format(Date(it.toLong())) }
-                granularity = DateUtils.DAY_IN_MILLIS.toFloat()
-            }
+            description.isEnabled = false
+            axisLeft.isEnabled = false
+            xAxis.valueFormatter = dateValueFormatter()
+
             observe(viewModel.countryData) { countryData ->
                 data = LineData(
                     listOf(
@@ -115,14 +113,40 @@ class CountryFragment : BaseFragment(R.layout.fragment_pager) {
         }
     }
 
-    private fun lineDataSet(data: List<DayData>, titleRes: Int, color: Int) = LineDataSet(data.toEntries(), getString(titleRes)).apply {
+    private fun deathsByDayPage() = Page(R.string.page_deaths_by_day, R.layout.view_bar_chart) {
+        barChart.apply {
+            setDrawValueAboveBar(true)
+            setTouchEnabled(true)
+            description.isEnabled = false
+            axisLeft.isEnabled = false
+            xAxis.valueFormatter = dateValueFormatter()
+
+            observe(viewModel.deathsDayData) { deathDayData ->
+                data = BarData(BarDataSet(deathDayData.map(toBarEntry()), "Deaths").apply {
+                    setColors(colorRed)
+                }).apply {
+                    barWidth = 0.9f
+                }
+                invalidate()
+            }
+        }
+    }
+
+    private fun dateValueFormatter() = valueFormatter { dateFormat.format(it.toMillis()) }
+
+    private fun lineDataSet(data: List<DayData>, titleRes: Int, color: Int) = LineDataSet(data.map(toEntry()), getString(titleRes)).apply {
         setCircleColor(color)
         setColor(color)
         lineWidth = 2f
         setDrawCircles(false)
     }
 
-    private fun List<DayData>.toEntries() = map { Entry(it.Date.time.toFloat(), it.Cases.toFloat()) }
+    private fun Date.toDays() = TimeUnit.MILLISECONDS.toDays(time).toFloat()
+    private fun Float.toMillis() = Date(TimeUnit.DAYS.toMillis(toLong()))
+
+    private fun toEntry(): (DayData) -> Entry = { Entry(it.Date.toDays(), it.Cases.toFloat()) }
+
+    private fun toBarEntry(): (DayData) -> BarEntry = { BarEntry(it.Date.toDays(), it.Cases.toFloat()) }
 }
 
 val countryModule = module {
@@ -132,6 +156,19 @@ val countryModule = module {
 private class CountryViewModel(val api: CountryApi, val summaryCountry: SummaryCountry) : ViewModel() {
 
     private fun data(status: String) = liveData(Dispatchers.IO) { emit(api.getData(summaryCountry.Slug, status)) }
+
+    val deathsData = data("deaths")
+    val deathsDayData = deathsData.map(previousDifferenceMapping())
+
+    private fun previousDifferenceMapping(): (List<DayData>) -> List<DayData> = {
+        it.mapIndexed { index, dayData ->
+            try {
+                DayData(dayData.Date, dayData.Cases - it[index - 1].Cases)
+            } catch (e: IndexOutOfBoundsException) {
+                dayData
+            }
+        }
+    }
 
     val countryData = combine(data("deaths"), data("confirmed"), data("recovered"))
 }
