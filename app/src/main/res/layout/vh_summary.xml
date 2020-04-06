@@ -39,7 +39,7 @@
                 android:layout_marginStart="@dimen/half_margin"
                 android:layout_marginTop="@dimen/half_margin"
                 android:text="Confirmed"
-                android:textColor="@color/blue"
+                android:textColor="@color/lightBlue"
                 app:layout_constraintStart_toEndOf="@id/title"
                 app:layout_constraintTop_toBottomOf="@id/newLabel" />
 
@@ -97,7 +97,7 @@
                 style="@style/ItemSubtitle.Centered.Bold"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/blue"
+                android:textColor="@color/lightBlue"
                 app:layout_constraintEnd_toEndOf="@id/newLabel"
                 app:layout_constraintTop_toTopOf="@id/confirmedLabel"
                 app:layout_constraintWidth_percent="0.2"
@@ -130,7 +130,7 @@
                 style="@style/ItemSubtitle.Centered.Bold"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/blue"
+                android:textColor="@color/lightBlue"
                 app:layout_constraintStart_toStartOf="@id/totalLabel"
                 app:layout_constraintTop_toTopOf="@id/confirmedLabel"
                 app:layout_constraintWidth_percent="0.2"

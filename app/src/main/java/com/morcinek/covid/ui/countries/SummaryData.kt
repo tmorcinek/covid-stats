@@ -23,6 +23,8 @@ data class SummaryCountry(
 
     fun hasData() = TotalConfirmed > 100
 
+    fun totalActive() = TotalConfirmed - TotalDeaths - TotalRecovered
+
     fun deathRate(): Float = TotalDeaths.toFloat() * 100 / TotalConfirmed
 }
 

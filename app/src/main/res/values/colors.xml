@@ -13,6 +13,7 @@
     <color name="text">#161616</color>
     <color name="textSecondary">#99161616</color>
 
-    <color name="green">#2e6838</color>
-    <color name="red">#9c2c2b</color>
+    <color name="green">#4cbb17</color>
+    <color name="red">#EA3c53</color>
+    <color name="lightBlue">#57A0D3</color>
 </resources>

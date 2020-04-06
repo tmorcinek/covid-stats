@@ -1,15 +1,14 @@
 package com.morcinek.covid.ui.country
 
-import android.graphics.Color
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.View
+import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.PercentFormatter
 import com.morcinek.covid.R
 import com.morcinek.covid.core.BaseFragment
 import com.morcinek.covid.core.extensions.*
@@ -31,6 +30,11 @@ class CountryFragment : BaseFragment(R.layout.fragment_pager) {
 
     private val dateFormat = dayMonthDateFormat()
 
+    private val colorText by lazy { getColor(requireContext(), R.color.text) }
+    private val colorBlue by lazy { getColor(requireContext(), R.color.lightBlue) }
+    private val colorGreen by lazy { getColor(requireContext(), R.color.green) }
+    private val colorRed by lazy { getColor(requireContext(), R.color.red) }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.apply {
@@ -41,6 +45,27 @@ class CountryFragment : BaseFragment(R.layout.fragment_pager) {
 
     private fun summaryPage() = Page(R.string.page_summary, R.layout.view_country_summary) {
         viewModel.summaryCountry.let {
+            pieChart.apply {
+                isRotationEnabled = false
+                description.isEnabled = false
+                setUsePercentValues(true)
+                setEntryLabelColor(colorText)
+                setEntryLabelTextSize(12f)
+                data = PieData(PieDataSet(
+                    listOf(
+                        PieEntry(it.totalActive().toFloat().div(it.TotalConfirmed), getString(R.string.active)),
+                        PieEntry(it.TotalDeaths.toFloat().div(it.TotalConfirmed), getString(R.string.page_deaths)),
+                        PieEntry(it.TotalRecovered.toFloat().div(it.TotalConfirmed), getString(R.string.page_recovered))
+                    ), ""
+                ).apply {
+                    sliceSpace = 5f
+                    colors = listOf(colorBlue, colorRed, colorGreen)
+                }).apply {
+                    setValueFormatter(PercentFormatter(pieChart))
+                    setValueTextColor(colorText)
+                    setValueTextSize(16f)
+                }
+            }
             rateLayout.apply {
                 title.setText(R.string.rate_title)
                 subtitle.setText(R.string.rate_subtitle)
@@ -74,30 +99,24 @@ class CountryFragment : BaseFragment(R.layout.fragment_pager) {
                 valueFormatter = valueFormatter { dateFormat.format(Date(it.toLong())) }
                 granularity = DateUtils.DAY_IN_MILLIS.toFloat()
             }
-
             observe(viewModel.countryData) { countryData ->
                 data = LineData(
                     listOf(
-                        LineDataSet(countryData.first.toEntries(), "Deaths").apply {
-                            setColor(Color.RED)
-                            setCircleColor(Color.RED)
-                            setDrawCircles(false)
-                            setLineWidth(2f)
-                        },
-                        LineDataSet(countryData.second.toEntries(), "Confirmed").apply {
-                            setDrawCircles(false)
-                            setLineWidth(2f)
-                        },
-                        LineDataSet(countryData.third.toEntries(), "Recovered").apply {
-                            setCircleColor(Color.rgb(40, 255, 40))
-                            setColor(Color.GREEN)
-                            setDrawCircles(false)
-                        }
+                        lineDataSet(countryData.first, R.string.page_deaths, colorRed),
+                        lineDataSet(countryData.second, R.string.page_confirmed, colorBlue),
+                        lineDataSet(countryData.third, R.string.page_recovered, colorGreen)
                     )
                 )
                 invalidate()
             }
         }
+    }
+
+    private fun lineDataSet(data: List<DayData>, titleRes: Int, color: Int) = LineDataSet(data.toEntries(), getString(titleRes)).apply {
+        setCircleColor(color)
+        setColor(color)
+        lineWidth = 2f
+        setDrawCircles(false)
     }
 
     private fun List<DayData>.toEntries() = map { Entry(it.Date.time.toFloat(), it.Cases.toFloat()) }
