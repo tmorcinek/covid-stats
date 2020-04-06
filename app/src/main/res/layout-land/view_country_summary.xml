@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+        <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChart"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_weight="1"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:padding="@dimen/margin">
+
+
+            <include
+                    android:id="@+id/rateLayout"
+                    layout="@layout/view_value_vertical" />
+
+            <include
+                    android:id="@+id/deathRecoveredRatio"
+                    layout="@layout/view_value_vertical" />
+
+            <include
+                    android:id="@+id/confirmedLayout"
+                    layout="@layout/view_value_horizontal" />
+
+            <include
+                    android:id="@+id/deathsLayout"
+                    layout="@layout/view_value_horizontal" />
+
+            <include
+                    android:id="@+id/recoveredLayout"
+                    layout="@layout/view_value_horizontal" />
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

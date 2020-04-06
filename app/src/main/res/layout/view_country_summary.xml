@@ -19,6 +19,10 @@
                 layout="@layout/view_value_vertical" />
 
         <include
+                android:id="@+id/deathRecoveredRatio"
+                layout="@layout/view_value_vertical" />
+
+        <include
                 android:id="@+id/confirmedLayout"
                 layout="@layout/view_value_horizontal" />
 

@@ -3,34 +3,27 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin"
+        android:layout_margin="@dimen/half_margin"
         tools:showIn="@layout/view_country_summary">
 
     <TextView
             android:id="@+id/title"
             style="@style/ItemTitle"
-            android:layout_centerHorizontal="true"
+            android:layout_alignParentStart="true"
+            android:layout_toEndOf="@id/value"
+            android:layout_marginHorizontal="@dimen/margin"
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="@string/deaths_title" />
+            tools:text="Death rate" />
 
     <TextView
             android:id="@+id/value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/title"
-            android:layout_centerHorizontal="true"
-            android:padding="@dimen/margin"
-            android:textSize="40sp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/font_super_size"
             android:textStyle="bold"
-            tools:text="234" />
-
-
-    <TextView
-            android:id="@+id/subtitle"
-            style="@style/ItemSubtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/value"
-            tools:text="@string/deaths_subtitle" />
+            tools:text="12.324%" />
 </RelativeLayout>
