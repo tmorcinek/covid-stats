@@ -24,6 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.dsl.module
+import java.text.DecimalFormat
 
 
 class TopTenFragment : BaseFragment(R.layout.fragment_list) {
@@ -31,8 +32,6 @@ class TopTenFragment : BaseFragment(R.layout.fragment_list) {
     private val viewModel by viewModel<TopTenViewModel>()
 
     private val navController: NavController by lazyNavController()
-
-//    override val fabConfiguration = FabConfiguration({ navController.navigate(R.id.nav_how_many_players) })
 
     override val menuConfiguration = createMenuConfiguration {
         addAction(R.string.sort_by, R.drawable.ic_filter) {
@@ -111,6 +110,6 @@ private val sortingMethods = listOf(
     SortingMethod(R.string.sorting_total_confirmed, { sortedBy { it.TotalConfirmed } }, { TotalConfirmed.toString() }),
     SortingMethod(R.string.sorting_total_deaths, { sortedBy { it.TotalDeaths } }, { TotalDeaths.toString() }),
     SortingMethod(R.string.sorting_total_recovered, { sortedBy { it.TotalRecovered } }, { TotalRecovered.toString() }),
-    SortingMethod(R.string.sorting_rate, { sortedBy { it.deathRate() } }, { "${deathRate()}%" })
+    SortingMethod(R.string.sorting_rate, { sortedBy { it.deathRate() } }, { DecimalFormat("#.##%").format(deathRate()/100) })
 )
 

@@ -34,4 +34,7 @@
     <string name="sort_by">Sort By</string>
     <string name="isDescending">Is Descending</string>
 
+    <string name="percentage_format">%.2f%%</string>
+    <string name="ratio_format">%.2f</string>
+
 </resources>

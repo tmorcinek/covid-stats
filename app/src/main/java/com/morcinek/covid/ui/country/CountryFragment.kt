@@ -68,11 +68,11 @@ class CountryFragment : BaseFragment(R.layout.fragment_pager) {
             }
             rateLayout.apply {
                 title.setText(R.string.rate_title)
-                value.text = "${it.deathRate()}%"
+                value.text = getString(R.string.percentage_format, it.deathRate())
             }
             deathRecoveredRatio.apply {
                 title.setText(R.string.death_recovered_ratio_title)
-                value.text = "${it.TotalDeaths.toFloat().div(it.TotalRecovered)}"
+                value.text = getString(R.string.ratio_format, it.TotalDeaths.toFloat().div(it.TotalRecovered))
             }
             confirmedLayout.apply {
                 title.setText(R.string.confirmed_title)
