@@ -36,13 +36,11 @@ class TopTenFragment : BaseFragment(R.layout.fragment_list) {
     override val menuConfiguration = createMenuConfiguration {
         addAction(R.string.sort_by, R.drawable.ic_filter) {
             singleChoiceSelector(R.string.sort_by, getString(viewModel.sortingMethod.text), sortingMethods.map { getString(it.text) }) { _, index ->
-                viewModel.updateFilterData {
-                    sortingMethod = sortingMethods[index]
-                }
+                viewModel.setSortingMethod(sortingMethods[index])
             }
         }
         addAction(R.string.isDescending, R.drawable.ic_arrow_upward) {
-            viewModel.updateFilterData { isDescending = !isDescending }
+            viewModel.toggleIsDescending()
             invalidateOptionsMenu()
         }
     }
@@ -85,7 +83,7 @@ private class TopTenViewModel(val summaryApi: SummaryApi) : ViewModel() {
 
     private val filterData = mutableValueLiveData(FilterData(true, sortingMethods.first()))
 
-    val sortingMethod : SortingMethod
+    val sortingMethod: SortingMethod
         get() = filterData.value!!.sortingMethod
 
     val isDescending: Boolean
@@ -97,12 +95,13 @@ private class TopTenViewModel(val summaryApi: SummaryApi) : ViewModel() {
             .map { TitleValue(it.Country, filterData.sortingMethod.formatting(it), it) }
     }
 
-    fun updateFilterData(update: FilterData.() -> Unit) = filterData.postValue(filterData.value!!.apply(update))
+    fun toggleIsDescending() = filterData.postValue(filterData.value?.let { FilterData(!it.isDescending, it.sortingMethod) })
+    fun setSortingMethod(sortingMethod: SortingMethod) = filterData.postValue(FilterData(filterData.value!!.isDescending, sortingMethod))
 }
 
 private data class TitleValue(val title: String, val value: String, val summaryCountry: SummaryCountry)
 
-private class FilterData(var isDescending: Boolean, var sortingMethod: SortingMethod)
+private class FilterData(val isDescending: Boolean, val sortingMethod: SortingMethod)
 
 private class SortingMethod(val text: Int, val sorting: Iterable<SummaryCountry>.() -> Iterable<SummaryCountry>, val formatting: SummaryCountry.() -> String)
 
@@ -110,6 +109,6 @@ private val sortingMethods = listOf(
     SortingMethod(R.string.sorting_total_confirmed, { sortedBy { it.TotalConfirmed } }, { TotalConfirmed.toString() }),
     SortingMethod(R.string.sorting_total_deaths, { sortedBy { it.TotalDeaths } }, { TotalDeaths.toString() }),
     SortingMethod(R.string.sorting_total_recovered, { sortedBy { it.TotalRecovered } }, { TotalRecovered.toString() }),
-    SortingMethod(R.string.sorting_rate, { sortedBy { it.deathRate() } }, { DecimalFormat("#.##%").format(deathRate()/100) })
+    SortingMethod(R.string.sorting_rate, { sortedBy { it.deathRate() } }, { DecimalFormat("#.##%").format(deathRate() / 100) })
 )
 
