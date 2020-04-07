@@ -109,6 +109,7 @@ private val sortingMethods = listOf(
     SortingMethod(R.string.sorting_total_confirmed, { sortedBy { it.TotalConfirmed } }, { TotalConfirmed.toString() }),
     SortingMethod(R.string.sorting_total_deaths, { sortedBy { it.TotalDeaths } }, { TotalDeaths.toString() }),
     SortingMethod(R.string.sorting_total_recovered, { sortedBy { it.TotalRecovered } }, { TotalRecovered.toString() }),
-    SortingMethod(R.string.sorting_rate, { sortedBy { it.deathRate() } }, { DecimalFormat("#.##%").format(deathRate() / 100) })
+    SortingMethod(R.string.sorting_rate, { sortedBy { it.deathRate() } }, { DecimalFormat("0.00%").format(deathRate() / 100) }),
+    SortingMethod(R.string.sorting_death_recovered_ration, { sortedBy { it.deathRecoverRatio() } }, { DecimalFormat("0.00").format(deathRecoverRatio()) })
 )
 

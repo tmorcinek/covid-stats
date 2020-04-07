@@ -26,6 +26,8 @@ data class SummaryCountry(
     fun totalActive() = TotalConfirmed - TotalDeaths - TotalRecovered
 
     fun deathRate(): Float = TotalDeaths.toFloat() * 100 / TotalConfirmed
+
+    fun deathRecoverRatio(): Float = TotalDeaths.toFloat().div(TotalRecovered)
 }
 
 interface SummaryApi {

@@ -37,7 +37,7 @@ internal fun CountryFragment.summaryPage() = Page(R.string.page_summary, R.layou
         }
         deathRecoveredRatio.apply {
             title.setText(R.string.death_recovered_ratio_title)
-            value.text = getString(R.string.ratio_format, it.TotalDeaths.toFloat().div(it.TotalRecovered))
+            value.text = getString(R.string.ratio_format, it.deathRecoverRatio())
         }
         confirmedLayout.apply {
             title.setText(R.string.confirmed_title)
