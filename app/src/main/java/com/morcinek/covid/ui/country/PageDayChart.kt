@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.DefaultValueFormatter
 import com.morcinek.covid.R
 import com.morcinek.covid.core.extensions.Page
 import com.morcinek.covid.core.extensions.observe
@@ -20,10 +21,16 @@ private fun CountryFragment.byDayPage(title: Int, layoutId: Int, color: Int, liv
         description.isEnabled = false
         legend.isEnabled = false
         axisLeft.isEnabled = false
-        xAxis.valueFormatter = dateValueFormatter()
+        xAxis.apply {
+            valueFormatter = dateValueFormatter()
+            granularity = 1f
+        }
 
         observe(liveData) { dayData ->
-            data = BarData(BarDataSet(dayData.map(toBarEntry()), "").apply { setColors(color) }).apply { barWidth = 0.9f }
+            data = BarData(BarDataSet(dayData.map(toBarEntry()), "").apply {
+                setColors(color)
+                valueFormatter = DefaultValueFormatter(0)
+            }).apply { barWidth = 0.9f }
             invalidate()
         }
     }
