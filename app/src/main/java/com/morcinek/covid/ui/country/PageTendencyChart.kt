@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.view_line_chart.view.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-private val dateFormat = dayMonthDateFormat()
 
 internal fun CountryFragment.tendencyChartPage() = Page(R.string.page_chart, R.layout.view_line_chart) {
     chart.apply {
@@ -39,7 +38,11 @@ internal fun CountryFragment.tendencyChartPage() = Page(R.string.page_chart, R.l
 internal fun Date.toDays() = TimeUnit.MILLISECONDS.toDays(time).toFloat()
 internal fun Float.toMillis() = Date(TimeUnit.DAYS.toMillis(toLong()))
 
+
+private val dateFormat = dayMonthDateFormat()
+
 internal fun dateValueFormatter() = valueFormatter { dateFormat.format(it.toMillis()) }
+
 
 private fun toEntry(): (DayData) -> Entry = { Entry(it.Date.toDays(), it.Cases.toFloat()) }
 

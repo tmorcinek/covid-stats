@@ -39,7 +39,7 @@ val countryModule = module {
     viewModel { (fragment: Fragment) -> CountryViewModel(getApi(), fragment.getParcelable()) }
 }
 
-internal class CountryViewModel(val api: CountryApi, val summaryCountry: SummaryCountry) : ViewModel() {
+internal class CountryViewModel(private val api: CountryApi, val summaryCountry: SummaryCountry) : ViewModel() {
 
     private fun data(status: String) = liveData(Dispatchers.IO) { emit(api.getData(summaryCountry.Slug, status)) }
 
